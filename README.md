@@ -1,6 +1,7 @@
 # rpi-nano-httpd
 
-A nano sized web server packed into a Docker Nano Container
+A nano sized web server packed into a Docker Nano Container. Without any payload at all.
+Payload is instead volume mounted into the container.
 
 ## Step 1: Compile the assembly source code
 
@@ -40,25 +41,25 @@ make
 Now we do have a ready-to-run Docker Image with a single statically linked ARM binary for use on a Raspberry Pi.
 ```
 docker images
-REPOSITORY               TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
-hypriot/rpi-nano-httpd   0.1.0               0fd6d79d7479        15 minutes ago      87.7 kB
-hypriot/rpi-nano-httpd   latest              0fd6d79d7479        15 minutes ago      87.7 kB
+REPOSITORY                  TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+peterrosell/rpi-nano-httpd  0.1.0               43ba25e1c004        2 hours ago         4.33kB
+peterrosell/rpi-nano-httpd  latest              43ba25e1c004        2 hours ago         4.33kB
 ```
-Please note, the size of the Docker Image includes the payload too! Without the payload the image size would be 4kByte only! Ok, that's not `nano` anymore, that's more `pico` sized.
+The image size is only 4kByte only! 
 
-## Step 3: Now let's run a lot of these containers on our Raspberry Pi
-To start 10 web servers use the following command
+## Step 3: Now let's run a container on our Raspberry Pi
+To start it run this command. The current directory with be the root of the web site.
 ```
-./start-webservers.sh 10
-```
-To ramp up to 100 web servers use the following command
-```
-./start-webservers.sh 100 10
+docker run --name=webserver -v $PWD:/www -p 80:80 peterrosell/rpi-nano-httpd
 ```
 That's it, have fun.
 
 
 # Acknoledgements
+
+## Forked
+This project is forked from hypriot/rpi-nano-httpd. The change is to remove the payload from within
+the container and instead volume mount it from the host.
 
 ## httpd, original source code
 https://www.raspberrypi.org/forums/viewtopic.php?p=320919
